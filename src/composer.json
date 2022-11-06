@@ -12,6 +12,7 @@
         "fideloper/proxy": "^4.4",
         "laravel/framework": "^6.20.26",
         "laravel/tinker": "^2.5",
+        "php-amqplib/rabbitmq-bundle": "^2.6.1",
         "vladimir-yuldashev/laravel-queue-rabbitmq": "10.2.3"
     },
     "require-dev": {
