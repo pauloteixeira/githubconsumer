@@ -1,0 +1,84 @@
+version: '3'
+services:
+
+    #PHP SERVICE
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: pauloaugustot/php
+        container_name: app
+        restart: unless-stopped
+        tty: true
+        environment:
+            SERVICE_NAME: app
+            SERVICE_TAG: dev
+        working_dir: /var/www
+        volumes: 
+            - ./:/var/www
+            - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        networks:
+            - app-network
+
+    #NGINX SERVICE
+    webserver:
+        image: nginx:alpine
+        container_name: serverapp
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./:/var/www
+            - ./nginx/conf.d/:/etc/nginx/conf.d/
+        networks:
+            - app-network
+
+    #MYSQL SERVICE
+    db:
+        image: mariadb:10
+        container_name: db
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: ghubber
+            MYSQL_ROOT_PASSWORD: senhaGhubber2022
+            SERVICE_TAG: dev
+            SERVICE_NAME: mysql
+        volumes: 
+            - dbdata:/var/lib/mysql
+            - ./mysql/mysql.cnf:/etc/mysql/mysql.cnf
+        networks: 
+            - app-network
+
+    # RABBITMQ SERVICE
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: rabbitmq_management
+        ports: 
+            - 25672:25672 # (erlang) communication between the nodes and CLI tool
+            - 15672:15672 # communication with the web management API 
+        volumes:
+            # data persistence
+            - ./docker_conf/rabbitmq/data/:/var/lib/rabbitmq/
+            # data mapping -> host: container
+            # queues and messages data of the container will be stored on the host
+        environment:
+            - RABBITMQ_DEFAULT_USER=admin
+            - RABBITMQ_DEFAULT_PASS=passw123
+        restart: always
+
+#NETWORKS
+networks:
+    app-network:
+        driver: bridge
+#VOLUMES
+volumes:
+    dbdata:
+        driver: local
+    logs-folder:
+        name: ${log_rabbitmq_management}
+        driver: local
