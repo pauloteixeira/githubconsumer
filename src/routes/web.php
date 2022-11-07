@@ -15,4 +15,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get("/publisher", "BroakerController@index")->name("publish.message");
+Route::get("/publisher", "BrokerController@index")->name("publish.message");
+Route::get("/receive", "BrokerController@receive")->name("receive.message");
