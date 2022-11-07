@@ -58,6 +58,7 @@ services:
     rabbitmq:
         image: rabbitmq:3-management
         container_name: rabbitmq_management
+        hostname: rabbitmq
         ports: 
             - 25672:25672 # (erlang) communication between the nodes and CLI tool
             - 15672:15672 # communication with the web management API 
@@ -69,6 +70,8 @@ services:
         environment:
             - RABBITMQ_DEFAULT_USER=admin
             - RABBITMQ_DEFAULT_PASS=passw123
+        networks: 
+            - app-network
         restart: always
 
 #NETWORKS
