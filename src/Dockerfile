@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
     locales jpegoptim optipng pngquant gifsicle \
     libzip-dev \
     zip\
-    vim unzip git curl \
+    vim unzip git curl wget cron \
     && docker-php-ext-install zip
 
 #CLEAR CACHE
