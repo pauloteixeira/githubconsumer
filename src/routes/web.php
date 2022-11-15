@@ -16,4 +16,6 @@ Route::get('/', function () {
 });
 
 Route::get("/publisher", "BrokerController@index")->name("publish.message");
-Route::get("/receive", "BrokerController@receive")->name("receive.message");
+Route::get("/receive", "BrokerController@consumerUsersQueue")->name("receive.user.message");
+Route::get("/receiveMessages", "BrokerController@consumerMessageQueue")->name("receive.messages");
+Route::get("/github", "BrokerController@requestGitHub")->name("github.request");
